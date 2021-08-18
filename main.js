@@ -80,6 +80,7 @@ function BuildTwitterData(sale, multi_sale){
         if (!SLUGS.includes(asset.collection.slug)) twitterData.other_asset = true;//Not what we're looking for, but is part of the bundle.
         else
         {
+            console.log(`\n Checking asset ${asset}.\n`);
             twitterData.plot_count += (asset.collection.slug == "treeverse"); //If its a plot, add it to the plot count.
             twitterData.tree_count += (asset.collection.slug == "nftverse"); //If its a tree, add it to the tree count.
 

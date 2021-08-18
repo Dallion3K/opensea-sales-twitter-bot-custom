@@ -67,7 +67,7 @@ async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
     console.log(text);
-
+    return;
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
     //Upload image, if image successfully uploaded, send tweet. 
     twitClient.post(
