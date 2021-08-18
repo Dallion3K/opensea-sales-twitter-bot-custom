@@ -78,7 +78,7 @@ async function SendTweet(text, imageurl){
             else//Success
             {
                 const tweetData = { //Set text and image uploaded.
-                    status: tweetText,
+                    status: text,
                     media_ids: [media.media_id_string]
                 };
 
