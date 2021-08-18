@@ -52,7 +52,6 @@ async function CheckDuplicateThenTweet(assetsData){
                 console.log('No recent tweet matching params found, commencing tweet.');
 
                 return SendTweet(tweetText,assetsData.asset_list[0].image_url);
-                return SendTweet(assetsData);
             }
             else{
                 if (Date.parse(statuses[0].created_at)-Date.now() > TenMinutes)
@@ -68,7 +67,6 @@ async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
     console.log(text);
-    return;
 
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
     //Upload image, if image successfully uploaded, send tweet. 
@@ -91,7 +89,7 @@ async function SendTweet(text, imageurl){
                         if (error)LogError(error);//Error
                         else//Success
                         {
-                            console.log(`Tweet sent: ${tweetText}`);
+                            console.log(`----| Tweet sent. |----`);
                         }
                     }
                 );

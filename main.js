@@ -3,7 +3,7 @@ const { times } = require('lodash');
 const {CheckDuplicateThenTweet, LogError} = require('./utility');
 
 const hour = 60*60*1000;
-let LastSaleTime = new Date(Date.now() - 2*hour);
+let LastSaleTime = new Date(Date.now() - 1*hour);
 const SLUGS = process.env.SLUGS.split(','); //Get slug array.
 
 //Returns an array of opensea successful sale events.
@@ -14,11 +14,12 @@ async function GetLatestSales(){
     let searchParams = {
         params:{
             event_type:"successful",
-            limit: 5,
-            occured_after: LastSaleTime.getTime(),
+            limit: 100,
             only_opensea: 'false',
             offset:0,
-            collection_slug:""
+            collection_slug:"",
+            occurred_after: LastSaleTime.getTime()/1000,
+            
         }
     }
 
@@ -41,7 +42,6 @@ async function GetLatestSales(){
         
         return 0;
     });
-    
     return allSales;
 }
 //Compare timestamps.
@@ -74,7 +74,7 @@ function BuildTwitterData(sale, multi_sale){
     twitterData.total_price = sale.total_price;
     twitterData.seller = sale.seller;
     twitterData.buyer = sale.winner_account;
-    
+
     for (index in tempAssets){
         var asset = tempAssets[index];
         if (!SLUGS.includes(asset.collection.slug)) twitterData.other_asset = true;//Not what we're looking for, but is part of the bundle.
