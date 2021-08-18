@@ -3,6 +3,7 @@ const axios = require('axios');
 const twit = require('twit');
 const fs = require('fs');
 const _ = require('lodash');
+const { createNamedStub } = require('graphql-tools');
 
 ///Data structure
 // let twitterData = 
@@ -28,7 +29,7 @@ const twitClient = new twit(twitConfig);
 
 async function CheckDuplicateThenTweet(assetsData){
 
-    let query = `$`; //TODO: Search string.
+    let query = "Coke+Pepsi"; //TODO: Search string.
 
     let searchParams = {
         q:query,
@@ -50,7 +51,10 @@ async function CheckDuplicateThenTweet(assetsData){
                 return SendTweet(assetsData);
             }
             else{
+                
                 console.error('Tweet is a duplicate; possible delayed transaction retrieved from OpenSea');
+                console.log(data);
+                console.log(statuses);
             }
         }
 
@@ -168,12 +172,12 @@ function getBase64(url) {
 
 function LogError(errorMessage){
 
-    var date = new Date(Date.now()).toLocaleString().split(',');
+    var date = Date.now().toString().substring(0,6);
 
     fs.appendFile(
-        "logs/"+date[0]+".txt",
-        `Time: ${date[1]}\nMessage:${errorMessage}\n\n`, 
-        ()=>{}
+        "logs/"+date+".txt",
+        `Time: ${Date.now()}\nMessage:${errorMessage}\n\n`,
+        (err)=>{if (!err)console.log("Error written to log.");else console.log(`Error writing log. ${err}`);}
     )
 }
 
