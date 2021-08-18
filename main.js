@@ -3,7 +3,7 @@ const { times } = require('lodash');
 const {CheckDuplicateThenTweet, LogError} = require('./utility');
 
 const hour = 60*60*1000;
-let LastSaleTime = new Date(Date.now() - 24*hour);
+let LastSaleTime = new Date(Date.now() - 2*hour);
 const SLUGS = process.env.SLUGS.split(','); //Get slug array.
 
 //Returns an array of opensea successful sale events.
@@ -59,7 +59,9 @@ function BuildTwitterData(sale, multi_sale){
        plot_count: 0,
        other_asset: false,
        total_price:0,
-       payment_token:null
+       payment_token:null,
+       seller:null,
+       buyer:null
     }
 
     let tempAssets = [];
@@ -70,6 +72,8 @@ function BuildTwitterData(sale, multi_sale){
 
     twitterData.payment_token = sale.payment_token;
     twitterData.total_price = sale.total_price;
+    twitterData.seller = sale.seller;
+    twitterData.buyer = sale.winner_account;
     
     for (index in tempAssets){
         var asset = tempAssets[index];
@@ -78,9 +82,6 @@ function BuildTwitterData(sale, multi_sale){
         {
             twitterData.plot_count += (asset.collection.slug == "treeverse"); //If its a plot, add it to the plot count.
             twitterData.tree_count += (asset.collection.slug == "nftverse"); //If its a tree, add it to the tree count.
-
-            if (twitterData.transaction==null)
-                twitterData.transaction = asset.transaction; //Add transaction info if not already set.
 
             twitterData.asset_list.push(asset); //Add valid asset to list.
 

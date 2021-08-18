@@ -4,16 +4,7 @@ const twit = require('twit');
 const fs = require('fs');
 const _ = require('lodash');
 const { createNamedStub } = require('graphql-tools');
-
-///Data structure
-// let twitterData = 
-// {
-//    asset_list:[],
-//    tree_count: 0,
-//    plot_count: 0,
-//    other_asset: false,
-//    transaction:null
-// }
+const TenMinutes = 10*60*1000;
 
 
 //Keys loaded from .env
@@ -26,10 +17,22 @@ const twitConfig = {
 
 //Twitter Client.
 const twitClient = new twit(twitConfig);
+///Data structure
+// let twitterData = 
+// {
+//    asset_list:[],
+//    tree_count: 0,
+//    plot_count: 0,
+//    other_asset: false,
+//    total_price:0,
+//    payment_token:null
+//    transaction
+// }
 
 async function CheckDuplicateThenTweet(assetsData){
+    let tweetText = GetTweetFromAssets(assetsData);
 
-    let query = "Coke+Pepsi"; //TODO: Search string.
+    let query = tweetText; //TODO: Search string.
 
     let searchParams = {
         q:query,
@@ -48,25 +51,23 @@ async function CheckDuplicateThenTweet(assetsData){
             {
                 console.log('No recent tweet matching params found, commencing tweet.');
 
+                return SendTweet(tweetText,assetsData.asset_list[0].image_url);
                 return SendTweet(assetsData);
             }
             else{
-                
+                if (Date.parse(statuses[0].created_at)-Date.now() > TenMinutes)
                 console.error('Tweet is a duplicate; possible delayed transaction retrieved from OpenSea');
-                console.log(data);
-                console.log(statuses);
+
             }
         }
 
     });
 }
 
-async function SendTweet(assets){
-    const image = await (getBase64(assets.asset_list[0].image));    // Format our image to base64
+async function SendTweet(text, imageurl){
+    const image = await (getBase64(imageurl));    // Format our image to base64
     
-    let tweetText = GetTweetFromAssets(assets);
-
-    console.log(tweetText);
+    console.log(text);
     return;
 
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
@@ -109,14 +110,13 @@ function GetTweetFromAssets(assets){
     const usdPrice = ((assets.total_price/1000000000000000000) * assets.payment_token.usd_price).toFixed(2);
     const symbol = (assets.payment_token.symbol=='WETH'||assets.payment_token.symbol=='ETH')?'Ξ':assets.payment_token.symbol;
 
-    const buyerAddy = GetNameOrAddy(firstAsset.winner_account);
-    const sellerAddy = GetNameOrAddy(firstAsset.seller);
+    const buyerAddy = GetNameOrAddy(assets.buyer);
+    const sellerAddy = GetNameOrAddy(assets.seller);
 
     let tweetText = ``;
 
     if (assets.asset_list > 1 || assets.other_assets) //Its a bundle.
     {
-
         if (treeCount > 0)  //Append tree count if tree(s).
         {
             tweetText+=`${treeCount} Tree`
@@ -142,7 +142,7 @@ function GetTweetFromAssets(assets){
     }
     else //Not a bundle, just the one asset.
     {
-        tweetText += `${firstAsset.tokenName} was purchased `; //Use the token name.
+        tweetText += `${firstAsset.name} was purchased `; //Use the token name.
     }
 
     //Add pricing, addresses, and link.
