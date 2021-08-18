@@ -71,7 +71,8 @@ function BuildTwitterData(sale, multi_sale){
     twitterData.payment_token = sale.payment_token;
     twitterData.total_price = sale.total_price;
     
-    tempAssets.forEach((asset)=>{
+    for (index in tempAssets){
+        var asset = tempAssets[index];
         if (!SLUGS.includes(asset.collection.slug)) twitterData.other_asset = true;//Not what we're looking for, but is part of the bundle.
         else
         {
@@ -84,7 +85,9 @@ function BuildTwitterData(sale, multi_sale){
             twitterData.asset_list.push(asset); //Add valid asset to list.
 
         }
-    });
+    }
+
+    return twitterData;
 }
 function ProcessAllSales(asset_list){
     console.log("Processing sale data.");
@@ -110,7 +113,7 @@ function ProcessAllSales(asset_list){
             console.log("Building tweet.");
 
             twitterData = BuildTwitterData(sale, sale.asset_bundle != null); //Send all sale data. If asset == null, then the asset_bundle.assets property will be an array of multiple assets.
-            formatAndSendTweet(twitterData);
+            CheckDuplicateThenTweet(twitterData);
             NewSaleCount++;
         }
 

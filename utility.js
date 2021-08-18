@@ -28,7 +28,7 @@ const twitClient = new twit(twitConfig);
 
 async function CheckDuplicateThenTweet(assetsData){
 
-    let query = ``; //TODO: Search string.
+    let query = `$`; //TODO: Search string.
 
     let searchParams = {
         q:query,
@@ -38,12 +38,12 @@ async function CheckDuplicateThenTweet(assetsData){
 
     twitClient.get('search/tweets',searchParams,(error, data, response)=>{
 
-        if (error) LogError(errorMessage); //Error
+        if (error) LogError(error); //Error
         else //Success
         {
             const statuses = _.get(data, 'statuses');
 
-            if (_.isEmpty(data)||_.isEmpty(status)) //No tweet found matching params.
+            if (_.isEmpty(data)||_.isEmpty(statuses)) //No tweet found matching params.
             {
                 console.log('No recent tweet matching params found, commencing tweet.');
 
@@ -171,7 +171,7 @@ function LogError(errorMessage){
     var date = new Date(Date.now()).toLocaleString().split(',');
 
     fs.appendFile(
-        date[0],
+        "logs/"+date[0]+".txt",
         `Time: ${date[1]}\nMessage:${errorMessage}\n\n`, 
         ()=>{}
     )
