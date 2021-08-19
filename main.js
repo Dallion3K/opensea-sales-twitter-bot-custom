@@ -14,7 +14,7 @@ async function GetLatestSales(){
     let searchParams = {
         params:{
             event_type:"successful",
-            limit: 100,
+            limit: 5,
             only_opensea: 'false',
             offset:0,
             collection_slug:"",
@@ -66,7 +66,12 @@ function BuildTwitterData(sale, multi_sale){
 
     let tempAssets = [];
     if (multi_sale) //Its a bundle.
+    {
         tempAssets = sale.asset_bundle.asset_list;
+        tempAssets.forEach((asset)=>{
+            LogError(`Bundle asset details: ${JSON.stringify(asset)}`);
+        });
+    }
     else //Its a normal sale
         tempAssets = [sale.asset];
 
@@ -80,7 +85,6 @@ function BuildTwitterData(sale, multi_sale){
         if (!SLUGS.includes(asset.collection.slug)) twitterData.other_asset = true;//Not what we're looking for, but is part of the bundle.
         else
         {
-            console.log(`\n Checking asset ${asset}.\n`);
             twitterData.plot_count += (asset.collection.slug == "treeverse"); //If its a plot, add it to the plot count.
             twitterData.tree_count += (asset.collection.slug == "nftverse"); //If its a tree, add it to the tree count.
 
