@@ -4,6 +4,7 @@ const twit = require('twit');
 const fs = require('fs');
 const _ = require('lodash');
 const { createNamedStub } = require('graphql-tools');
+const { platform } = require('os');
 const TenMinutes = 10*60*1000;
 
 
@@ -51,7 +52,7 @@ async function CheckDuplicateThenTweet(assetsData){
             {
                 console.log('No recent tweet matching params found, commencing tweet.');
 
-                return SendTweet(tweetText,assetsData.asset_list[0].image_url);
+                return SendTweet(tweetText,assetsData.main_asset.image_url);
             }
             else{
                 if (Date.parse(statuses[0].created_at)-Date.now() > TenMinutes)
@@ -100,8 +101,8 @@ async function SendTweet(text, imageurl){
 
 //Format tweet from asset data.
 function GetTweetFromAssets(assets){
-    const firstAsset = assets.asset_list[0];
-    const openseaLink = `https://opensea.io/assets/${firstAsset.asset_contract.address}/${firstAsset.token_id}`;
+    const firstAsset = assets.main_asset;
+    const openseaLink = (assets.permalink)?assets.permalink:`https://opensea.io/assets/${firstAsset.asset_contract.address}/${firstAsset.token_id}`;
     const treeCount = assets.tree_count;
     const plotCount = assets.plot_count;
     const cryptoPrice  = (assets.total_price/1000000000000000000).toFixed(2);
@@ -113,7 +114,8 @@ function GetTweetFromAssets(assets){
 
     let tweetText = ``;
 
-    if (assets.asset_list > 1 || assets.other_assets) //Its a bundle.
+
+    if (assets.other_asset) //Its a bundle.
     {
         if (treeCount > 0)  //Append tree count if tree(s).
         {
@@ -128,7 +130,7 @@ function GetTweetFromAssets(assets){
 
         if (plotCount > 0) //Append plot count if plot(s).
         {
-            tweetText+=`${plotCount} Plot`
+            tweetText+=`${plotCount} Founder's Private Plot`
             
             if (plotCount > 1) //Pluralise
                 tweetText+="s"
@@ -140,11 +142,11 @@ function GetTweetFromAssets(assets){
     }
     else //Not a bundle, just the one asset.
     {
-        tweetText += `${firstAsset.name} was purchased `; //Use the token name.
+        tweetText += `${firstAsset.name} was purchased`; //Use the token name.
     }
 
     //Add pricing, addresses, and link.
-    tweetText += `for ${cryptoPrice}${symbol} ($${usdPrice}) by ${buyerAddy} from ${sellerAddy} #treeverse #ethereum ${openseaLink}`;
+    tweetText += ` for ${cryptoPrice}${symbol} ($${usdPrice}) by ${buyerAddy} from ${sellerAddy} #treeverse #ethereum ${openseaLink}`;
 
     return tweetText;
 }

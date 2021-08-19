@@ -3,7 +3,7 @@ const { times } = require('lodash');
 const {CheckDuplicateThenTweet, LogError} = require('./utility');
 
 const hour = 60*60*1000;
-let LastSaleTime = new Date(Date.now() - 1*hour);
+let LastSaleTime = new Date(Date.now() - 20*hour);
 const SLUGS = process.env.SLUGS.split(','); //Get slug array.
 
 //Returns an array of opensea successful sale events.
@@ -51,29 +51,28 @@ function CheckIsNewSale(timestamp){
     return LastSaleTime.getTime() <= salesTimestamp; //Less than or equal to account for items sold at the exact same time.
 }
 function BuildTwitterData(sale, multi_sale){
-
     let twitterData = 
     {
-       asset_list:[],
+       main_asset: null,
        tree_count: 0,
        plot_count: 0,
        other_asset: false,
        total_price:0,
        payment_token:null,
        seller:null,
-       buyer:null
+       buyer:null,
+       permalink: null
     }
 
     let tempAssets = [];
     if (multi_sale) //Its a bundle.
     {
-        tempAssets = sale.asset_bundle.asset_list;
-        tempAssets.forEach((asset)=>{
-            LogError(`Bundle asset details: ${JSON.stringify(asset)}`);
-        });
+        tempAssets = sale.asset_bundle.assets;
+        twitterData.permalink = sale.asset_bundle.permalink;
     }
     else //Its a normal sale
-        tempAssets = [sale.asset];
+    tempAssets = [sale.asset];
+    
 
     twitterData.payment_token = sale.payment_token;
     twitterData.total_price = sale.total_price;
@@ -88,10 +87,13 @@ function BuildTwitterData(sale, multi_sale){
             twitterData.plot_count += (asset.collection.slug == "treeverse"); //If its a plot, add it to the plot count.
             twitterData.tree_count += (asset.collection.slug == "nftverse"); //If its a tree, add it to the tree count.
 
-            twitterData.asset_list.push(asset); //Add valid asset to list.
+            if (twitterData.main_asset == null)
+                twitterData.main_asset = asset; //Use asset.
 
         }
     }
+
+    twitterData.other_asset = twitterData.other_asset || twitterData.plot_count > 1 || twitterData.tree_count > 1 || (twitterData.plot_count > 0 && twitterData.tree_count  > 0);
 
     return twitterData;
 }
@@ -114,7 +116,7 @@ function ProcessAllSales(asset_list){
 
         if (CheckIsNewSale(sale.transaction.timestamp))
         {
-            LastSaleTime = new Date(Date.parse(sale.transaction.timestamp));  //Update the last sale time.
+            LastSaleTime = new Date(sale.transaction.timestamp);  //Update the last sale time.
             console.log(`New sale found at: ${LastSaleTime}`);
             console.log("Building tweet.");
 
