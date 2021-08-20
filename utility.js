@@ -53,7 +53,7 @@ async function CheckDuplicateThenTweet(assetsData){
                 return SendTweet(tweetText,assetsData.main_asset.image_url);
             }
             else{
-                if (Date.parse(statuses[0].created_at)-Date.now() > TenMinutes)
+
                 console.error('Tweet is a duplicate; possible delayed transaction retrieved from OpenSea');
 
             }
@@ -66,7 +66,6 @@ async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
     console.log(text);
-    return;
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
     //Upload image, if image successfully uploaded, send tweet. 
     twitClient.post(
