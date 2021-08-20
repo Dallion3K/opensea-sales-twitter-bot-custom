@@ -4,9 +4,11 @@ Based off [dsgriffin's twitter bot](https://github.com/dsgriffin/opensea-sales-t
 
 ## Donations
 
-If you find this script/repo useful for your project, any ETH/token donations are greatly appreciated 🙏 
-
+If you find this script/repo useful for your project, any ETH/token donations are appreciated.
 Ethereum Address: 0xD6215aA5266880aF67a883512d026bbe4d7467c9
+
+Or donate to [dsgriffin's twitter bot](https://github.com/dsgriffin/opensea-sales-twitter-bot) as the inspiration for this bot.
+
 
 ## Requirements
 
