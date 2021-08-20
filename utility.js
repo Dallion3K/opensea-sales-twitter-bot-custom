@@ -29,9 +29,9 @@ const twitClient = new twit(twitConfig);
 // }
 
 async function CheckDuplicateThenTweet(assetsData){
-    let tweetText = GetTweetFromAssets(assetsData);
 
-    let query = tweetText; //TODO: Search string.
+
+    let query = GetSearchQuery(assetsData);
 
     let searchParams = {
         q:query,
@@ -49,6 +49,7 @@ async function CheckDuplicateThenTweet(assetsData){
             if (_.isEmpty(data)||_.isEmpty(statuses)) //No tweet found matching params.
             {
                 console.log('No recent tweet matching params found, commencing tweet.');
+                let tweetText = GetTweetFromAssets(assetsData);
 
                 return SendTweet(tweetText,assetsData.main_asset.image_url);
             }
@@ -66,6 +67,7 @@ async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
     console.log(text);
+    return;
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
     //Upload image, if image successfully uploaded, send tweet. 
     twitClient.post(
@@ -147,7 +149,16 @@ function GetTweetFromAssets(assets){
 
     return tweetText;
 }
+//Get search string from data.
+function GetSearchQuery(assets){
+    const symbol = (assets.payment_token.symbol=='WETH'||assets.payment_token.symbol=='ETH')?'Ξ':assets.payment_token.symbol;
+    const openseaLink = (assets.permalink)?assets.permalink:`https://opensea.io/assets/${firstAsset.asset_contract.address}/${firstAsset.token_id}`;
 
+    const cryptoPrice  = (assets.total_price/1000000000000000000).toFixed(2);
+    const buyerAddy = GetNameOrAddy(assets.buyer);
+    const sellerAddy = GetNameOrAddy(assets.seller);
+    return encodeURIComponent(`purchased for ${cryptoPrice}${symbol}`)+"+"+encodeURIComponent(`by ${buyerAddy} from ${sellerAddy}`+"+"+encodeURIComponent(openseaLink));
+}
 //Get account name or short addy.
 function GetNameOrAddy(acc){
     //Name check.
