@@ -3,8 +3,6 @@ const axios = require('axios');
 const twit = require('twit');
 const fs = require('fs');
 const _ = require('lodash');
-const { createNamedStub } = require('graphql-tools');
-const { platform } = require('os');
 const TenMinutes = 10*60*1000;
 
 
