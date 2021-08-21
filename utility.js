@@ -12,6 +12,7 @@ const twitConfig = {
     consumer_secret: process.env.CONSUMER_SECRET,
     access_token: process.env.ACCESS_TOKEN_KEY,
     access_token_secret: process.env.ACCESS_TOKEN_SECRET,
+    timeout_ms: 30*1000 //30 seconds before giving up on a search
 };
 
 //Twitter Client.
@@ -157,10 +158,10 @@ function GetSearchQuery(assets){
     const buyerAddy = GetNameOrAddy(assets.buyer);
     const sellerAddy = GetNameOrAddy(assets.seller);
 
-    var component_price = encodeURIComponent(`purchased for ${cryptoPrice}${symbol}`);
-    var component_accounts = encodeURIComponent(`by ${buyerAddy} from ${sellerAddy}`);
-    var component_url = (`url:${assets.main_asset.token_id} OR "${assets.permalink}"`);
-    return component_price+"+"+component_accounts+"+"+component_url;
+    var component_price = encodeURIComponent(`"purchased for ${cryptoPrice}${symbol}"`);
+    var component_accounts = encodeURIComponent(`"by ${buyerAddy} from ${sellerAddy}"`);
+    var component_url = (`url:${assets.main_asset.token_id} OR url:"${assets.permalink}"`);
+    return component_price+"%20"+component_accounts+"%20"+component_url;
 }
 //Get account name or short addy.
 function GetNameOrAddy(acc){
