@@ -146,4 +146,4 @@ pollOpenSeaForSales();
 setInterval(async () => {
     console.log("---| Start Poll |---");
     pollOpenSeaForSales();
-}, 60000);
+}, 120000);
