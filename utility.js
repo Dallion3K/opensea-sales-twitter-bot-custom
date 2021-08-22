@@ -68,6 +68,7 @@ async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
     console.log(text);
+    return;
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
     //Upload image, if image successfully uploaded, send tweet. 
     twitClient.post(
@@ -158,9 +159,12 @@ function GetSearchQuery(assets){
     const buyerAddy = GetNameOrAddy(assets.buyer);
     const sellerAddy = GetNameOrAddy(assets.seller);
 
-    var component_price = encodeURIComponent(`"purchased for ${cryptoPrice}${symbol}"`);
+    var component_price = encodeURIComponent(`"for ${cryptoPrice}${symbol}"`);
     var component_accounts = encodeURIComponent(`"by ${buyerAddy} from ${sellerAddy}"`);
-    var component_url = (`url:${assets.main_asset.token_id} OR url:"${assets.permalink}"`);
+    var component_url = (`url:${openseaLink}`);
+
+
+
     return component_price+"%20"+component_accounts+"%20"+component_url;
 }
 //Get account name or short addy.
