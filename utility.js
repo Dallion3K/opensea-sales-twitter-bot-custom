@@ -159,13 +159,12 @@ function GetSearchQuery(assets){
     const buyerAddy = GetNameOrAddy(assets.buyer);
     const sellerAddy = GetNameOrAddy(assets.seller);
 
-    var component_price = encodeURIComponent(`"for ${cryptoPrice}${symbol}"`);
-    var component_accounts = encodeURIComponent(`"by ${buyerAddy} from ${sellerAddy}"`);
-    var component_url = (`url:${openseaLink}`);
+    var component_name = encodeURIComponent(`from:treeversebot `);
+    var component_price = encodeURIComponent(` "for ${cryptoPrice}${symbol}" `);
+    var component_accounts = encodeURIComponent(` "by ${buyerAddy} from ${sellerAddy}" `);
+    var component_url = (` url:${openseaLink}`);
 
-
-
-    return component_price+"%20"+component_accounts+"%20"+component_url;
+    return component_name+component_price+component_accounts+component_url;
 }
 //Get account name or short addy.
 function GetNameOrAddy(acc){
