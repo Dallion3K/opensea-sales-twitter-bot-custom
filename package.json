@@ -4,6 +4,8 @@
   "description": "Include multiple slugs in a twitter bot to watch your favourite NFT/FT projects recent sales.",
   "main": "main.js",
   "scripts": {
+    "deploy": "NODE_ENV=production; node ./TreeverseBot.js &",
+    "start": "node TreeverseBot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
