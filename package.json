@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "deploy": "NODE_ENV=production; node ./TreeverseBot.js &",
+    "monitor": "NODE_ENV=production; node ./TreeverseBot.js",
     "start": "node TreeverseBot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
