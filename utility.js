@@ -67,7 +67,7 @@ async function CheckDuplicateThenTweet(assetsData){
 async function SendTweet(text, imageurl){
     const image = await (getBase64(imageurl));    // Format our image to base64
     
-    console.log(text);
+    console.log(text+" | "+process.env.NODE_ENV);
     if (process.env.NODE_ENV!="production")
         return;
     //TODO: TEST CODE FOR TWEETS AFTER TESTING FORMATTING
