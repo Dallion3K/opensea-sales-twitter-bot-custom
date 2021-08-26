@@ -1,5 +1,5 @@
 {
-  "name": "opensea-sales-twitter-bot-custom",
+  "name": "opensea-sales-twitter-bot-treeverse",
   "version": "1.0.0",
   "description": "Include multiple slugs in a twitter bot to watch your favourite NFT/FT projects recent sales.",
   "main": "main.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dallion3K/opensea-sales-twitter-bot-custom.git"
+    "url": "git+https://github.com/Dallion3K/opensea-sales-twitter-bot-treeverse.git"
   },
   "keywords": [
     "Twitter",
@@ -23,9 +23,9 @@
   "author": "Dallion3K",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dallion3K/opensea-sales-twitter-bot-custom/issues"
+    "url": "https://github.com/Dallion3K/opensea-sales-twitter-bot-treeverse/issues"
   },
-  "homepage": "https://github.com/Dallion3K/opensea-sales-twitter-bot-custom#readme",
+  "homepage": "https://github.com/Dallion3K/opensea-sales-twitter-bot-treeverse#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
