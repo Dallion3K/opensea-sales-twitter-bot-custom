@@ -22,8 +22,6 @@ Once you have been granted access to a Twitter Developer Account, created a proj
 
 &nbsp;**SLUGS** - The OpenSea collection name(s) you wish to track (e.g. `lost-relics`). You can use multiple slugs by making a comma delimited list (e.g.: 'lost-relics,age-of-rust').
 
-I used a Virtual Private Server (VPS) with Ubuntu Server LTS installed. If you know how to personally host node applications, great! Otherwise checkout [dsgriffin's twitter bot](https://github.com/dsgriffin/opensea-sales-twitter-bot) for the Heroku method.
-
 ## Tweet Content
 
 By default the bot will include pure bundles (bundles where all items are a part of the same project/slug) and individual sales.
